@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+  <persistence-unit name="POS_projectPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>pos_project.classes.Invoice</class>
+    <class>pos_project.classes.Items</class>
+    <class>pos_project.classes.Client_1</class>
+    <class>pos_project.classes.Client</class>
+    <class>pos_project.classes.Item_1</class>
+    <class>pos_project.classes.Transaction</class>
+    <class>pos_project.classes.Collections</class>
+    <class>pos_project.classes.User</class>
+    <class>pos_project.classes.RegisteredMachine_1</class>
+    <class>pos_project.classes.Logs</class>
+    <class>pos_project.classes.Location</class>
+    <class>pos_project.classes.Stocks</class>
+    <class>pos_project.classes.Transfer</class>
+    <class>pos_project.classes.Retruns</class>
+    <class>pos_project.classes.Returns</class>
+    <class>pos_project.classes.ReturnMain</class>
+    <class>pos_project.classes.PreorderTransaction</class>
+    <class>pos_project.classes.Preorder</class>
+    <class>pos_project.classes.ItemLimit</class>
+    <class>pos_project.classes.OtReportAccess</class>
+    <class>pos_project.classes.ArReportAccess</class>
+    <class>pos_project.classes.UserTypeAccess</class>
+    <class>pos_project.classes.Convert</class>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/pos_db"/>
+      <property name="javax.persistence.jdbc.password" value="root"/>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.user" value="root"/>
+    </properties>
+  </persistence-unit>
+</persistence>

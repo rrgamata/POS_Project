@@ -1,0 +1,803 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/*
+ * AddClient.java
+ *
+ * Created on Jul 17, 2013, 2:38:44 PM
+ */
+package pos_project.UI;
+
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
+import pos_project.Action.InvoiceAction;
+import pos_project.Action.DateActions;
+import pos_project.Action.FractionAction;
+import pos_project.Action.LocationAction;
+import pos_project.Action.PreorderAction;
+import pos_project.classes.Client;
+import pos_project.classes.ErrorMessages;
+import pos_project.classes.Formats;
+import pos_project.classes.Invoice;
+import pos_project.classes.Item;
+import pos_project.classes.PreorderTransaction;
+import pos_project.classes.Preorder;
+import pos_project.classes.User;
+
+/**
+ *
+ * @author Cif3r
+ */
+public class PoUi extends javax.swing.JDialog {
+ private boolean outFlg = false;
+ private boolean editFlg = false;
+    private String itemNumber;
+    ArrayList<PreorderTransaction> transactionList = new ArrayList<PreorderTransaction>();
+    ArrayList<PreorderTransaction> deleteList = new ArrayList<PreorderTransaction>();
+    Preorder preorder;
+    Item item;
+    Client client;
+    Invoice invoice;
+    
+    /** Creates new form AddClient */
+    public PoUi(java.awt.Frame parent, boolean modal, boolean isOut) {
+        super(parent, modal);
+        initComponents();
+        locationComboBox.setModel(LocationAction.getLocationModel());
+        transactionList = new ArrayList<PreorderTransaction>();
+        outFlg = isOut;
+        this.setTitle("New Invoice Details");
+        if(isOut){
+            supplierLabel.setText("Customer Name");
+            supplierNumberLabel.setText("Customer #");
+        } else {
+            supplierLabel.setText("Supplier Name");
+            supplierNumberLabel.setText("Supplier #");
+            
+        }
+        itemNameLabel.setVisible(false);
+            customerNameLabel.setEnabled(true);
+            supplierLabel.setEnabled(true);
+            customerNumberValueLabel.setEnabled(true);
+            supplierNumberLabel.setEnabled(true);
+            jButton1.setEnabled(true);
+            invoiceYearComboBox.setModel(DateActions.getYearModel());
+            invoiceYearComboBox.setSelectedItem(new GregorianCalendar().get(GregorianCalendar.YEAR));
+            invoiceMonthComboBox.setSelectedIndex(new GregorianCalendar().get(GregorianCalendar.MONTH));
+            invoiceDayComboBox.setModel(DateActions.fixDay(invoiceMonthComboBox.getSelectedIndex(), invoiceYearComboBox.getSelectedItem().toString()));
+            invoiceDayComboBox.setSelectedIndex(new GregorianCalendar().get(GregorianCalendar.DATE)-1);
+            voidButton.setVisible(false);
+            initializeTable();
+            
+//        } else {
+//            customerNameLabel.setVisible(false);
+//            supplierLabel.setVisible(false);
+//            jButton1.setVisible(false);
+//        }
+        
+                
+    }
+    
+    
+    public PoUi(java.awt.Frame parent, boolean modal, boolean isOut, String poId) {
+        super(parent, modal);
+        initComponents();
+
+        voidButton.setEnabled(true);
+        deleteList.clear();
+        transactionList.clear();
+        preorder = Preorder.getPreorderWithId(poId);
+        locationComboBox.setModel(LocationAction.getLocationModel());
+        locationComboBox.setSelectedItem(Client.getClient(preorder.getPreorderLocationId()+""));
+       
+        transactionNumberTextField.setText(preorder.getPreorderNumber());
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTime(preorder.getPreorderDate());
+        invoiceYearComboBox.setModel(DateActions.getYearModel());
+        invoiceYearComboBox.setSelectedItem(cal.get(GregorianCalendar.YEAR));
+        invoiceMonthComboBox.setSelectedIndex(cal.get(GregorianCalendar.MONTH));
+        invoiceDayComboBox.setModel(DateActions.fixDay(invoiceMonthComboBox.getSelectedIndex(), invoiceYearComboBox.getSelectedItem().toString()));
+        invoiceDayComboBox.setSelectedIndex(cal.get(GregorianCalendar.DATE)-1);
+        customerNameLabel.setText(preorder.getClientName());
+        clientAddress.setText(preorder.getClientAddress());
+        client = Client.getClient(Integer.toString(preorder.getPreorderClientId()));
+        supplierLabel.setText("Supplier Name");
+        supplierNumberLabel.setText("Supplier #");
+        customerNumberValueLabel.setText(client.getClientNumber());
+        transactionList = PreorderTransaction.getTransactions(""+preorder.getPreorderId());
+        initializeTable();
+        editFlg = true;
+    }
+    
+  
+
+    /** This method is called from within the constructor to
+     * initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is
+     * always regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
+
+        jLabel1 = new javax.swing.JLabel();
+        supplierLabel = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        addInvoiceOkButton = new javax.swing.JButton();
+        addClientCancelButton = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        transactionNumberTextField = new javax.swing.JTextField();
+        customerNameLabel = new javax.swing.JLabel();
+        itemNameLabel = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        itemTable = new javax.swing.JTable();
+        totalLabel = new javax.swing.JLabel();
+        totalValueLabel = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        addItemButton = new javax.swing.JButton();
+        removeItemButton = new javax.swing.JButton();
+        jPanel5 = new javax.swing.JPanel();
+        invoiceMonthComboBox = new javax.swing.JComboBox();
+        invoiceDayComboBox = new javax.swing.JComboBox();
+        invoiceYearComboBox = new javax.swing.JComboBox();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        clientAddress = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        locationComboBox = new javax.swing.JComboBox();
+        supplierNumberLabel = new javax.swing.JLabel();
+        customerNumberValueLabel = new javax.swing.JLabel();
+        voidButton = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(550, 215));
+        setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL);
+        setResizable(false);
+        getContentPane().setLayout(new java.awt.GridBagLayout());
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel1.setText("PO Details");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 0, 0);
+        getContentPane().add(jLabel1, gridBagConstraints);
+
+        supplierLabel.setText("Customer Name");
+        supplierLabel.setEnabled(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
+        getContentPane().add(supplierLabel, gridBagConstraints);
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        jLabel3.setText("Item List");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 10);
+        getContentPane().add(jLabel3, gridBagConstraints);
+
+        addInvoiceOkButton.setText("OK");
+        addInvoiceOkButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addInvoiceOkButtonActionPerformed(evt);
+            }
+        });
+        jPanel1.add(addInvoiceOkButton);
+
+        addClientCancelButton.setText("Cancel");
+        addClientCancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addClientCancelButtonActionPerformed(evt);
+            }
+        });
+        jPanel1.add(addClientCancelButton);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 14;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        getContentPane().add(jPanel1, gridBagConstraints);
+
+        jLabel5.setText("PO #");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 5);
+        getContentPane().add(jLabel5, gridBagConstraints);
+
+        transactionNumberTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                transactionNumberTextFieldActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.ipadx = 150;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
+        getContentPane().add(transactionNumberTextField, gridBagConstraints);
+
+        customerNameLabel.setText("-");
+        customerNameLabel.setEnabled(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
+        getContentPane().add(customerNameLabel, gridBagConstraints);
+
+        itemNameLabel.setText("-");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 9;
+        getContentPane().add(itemNameLabel, gridBagConstraints);
+
+        jButton1.setText("Search");
+        jButton1.setEnabled(false);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        getContentPane().add(jButton1, gridBagConstraints);
+
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(452, 250));
+
+        itemTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        itemTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        jScrollPane1.setViewportView(itemTable);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        getContentPane().add(jScrollPane1, gridBagConstraints);
+
+        totalLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        totalLabel.setText("Total:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 13;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        getContentPane().add(totalLabel, gridBagConstraints);
+
+        totalValueLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        totalValueLabel.setText("0.00");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 13;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        getContentPane().add(totalValueLabel, gridBagConstraints);
+
+        addItemButton.setText("Add Item");
+        addItemButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addItemButtonActionPerformed(evt);
+            }
+        });
+        jPanel2.add(addItemButton);
+
+        removeItemButton.setText("Remove Item");
+        removeItemButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeItemButtonActionPerformed(evt);
+            }
+        });
+        jPanel2.add(removeItemButton);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        getContentPane().add(jPanel2, gridBagConstraints);
+
+        jPanel5.setLayout(new java.awt.GridBagLayout());
+
+        invoiceMonthComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" }));
+        invoiceMonthComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                invoiceMonthComboBoxActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        jPanel5.add(invoiceMonthComboBox, gridBagConstraints);
+
+        invoiceDayComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+        jPanel5.add(invoiceDayComboBox, gridBagConstraints);
+
+        invoiceYearComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "2010", "2011", "2012", "2013", "2014", "2015" }));
+        invoiceYearComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                invoiceYearComboBoxActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+        jPanel5.add(invoiceYearComboBox, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
+        getContentPane().add(jPanel5, gridBagConstraints);
+
+        jLabel4.setText("PO Date");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+        getContentPane().add(jLabel4, gridBagConstraints);
+
+        jLabel7.setText("Address");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(3, 5, 0, 5);
+        getContentPane().add(jLabel7, gridBagConstraints);
+
+        clientAddress.setText("-");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        getContentPane().add(clientAddress, gridBagConstraints);
+
+        jLabel6.setText("Location");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 5);
+        getContentPane().add(jLabel6, gridBagConstraints);
+
+        locationComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Cash", "7 Days", "15 Days", "30 Days", "45 Days", "60 Days", "90 Days", "120 Days", "150 Days", "180 Days" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
+        getContentPane().add(locationComboBox, gridBagConstraints);
+
+        supplierNumberLabel.setText("Customer Number");
+        supplierNumberLabel.setEnabled(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
+        getContentPane().add(supplierNumberLabel, gridBagConstraints);
+
+        customerNumberValueLabel.setText("-");
+        customerNumberValueLabel.setEnabled(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 0, 0);
+        getContentPane().add(customerNumberValueLabel, gridBagConstraints);
+
+        voidButton.setText("Void");
+        voidButton.setEnabled(false);
+        voidButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                voidButtonActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        getContentPane().add(voidButton, gridBagConstraints);
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void addInvoiceOkButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addInvoiceOkButtonActionPerformed
+//        boolean receivableFlg =false;
+        if(!checkItem()){
+           if(editFlg){
+               editPoLogic();
+           } else{
+               addPoLogic();
+           }
+            
+           
+        
+        
+       
+               
+            
+        }
+}//GEN-LAST:event_addInvoiceOkButtonActionPerformed
+
+    private void addClientCancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addClientCancelButtonActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+}//GEN-LAST:event_addClientCancelButtonActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        SearchUi detailsPopUp;
+        if(outFlg){
+            detailsPopUp = new SearchUi(new JFrame(),true, 1,outFlg);
+        } else {
+            detailsPopUp = new SearchUi(new JFrame(),true, 2,outFlg);
+        }
+        
+                detailsPopUp.setLocationRelativeTo(null);
+                detailsPopUp.pack();
+                detailsPopUp.setVisible(true);
+                if(detailsPopUp.getClient() != null){
+                    if(client != null && client.getClientId() != detailsPopUp.getClient().getClientId()){
+                        transactionList.clear();
+                        initializeTable();
+                    }
+                    client = detailsPopUp.getClient();
+                customerNameLabel.setText(client.getClientName());
+                clientAddress.setText(client.getClientAddress());
+                customerNumberValueLabel.setText(client.getClientNumber());
+                }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void addItemButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addItemButtonActionPerformed
+        // TODO add your handling code here:
+        InItemUi detailsPopUp;
+//        if(outFlg){
+////            detailsPopUp = new InItemUi(new JFrame(),true,outFlg);
+//          if(transactionList.size()< 8){
+//            detailsPopUp = new InItemUi(new JFrame(),true,outFlg,(Client) locationComboBox.getSelectedItem());
+//            detailsPopUp.setLocationRelativeTo(null);
+//            detailsPopUp.pack();
+//            detailsPopUp.setVisible(true);
+//            if(detailsPopUp.getTransaction()!= null){
+//                transactionList.add( detailsPopUp.getTransaction());
+//                initializeTable();      
+//            }
+//          } else {
+//              JOptionPane.showMessageDialog(this, ErrorMessages.WARNING_ITEM_LIMIT,ErrorMessages.TITLE_WARNING,JOptionPane.WARNING_MESSAGE);
+//          }
+//            
+//        } else {
+           if(!checkClient()){
+               detailsPopUp = new InItemUi(new JFrame(),true,outFlg,client.getClientId(),(Client) locationComboBox.getSelectedItem(),true);
+                detailsPopUp.setLocationRelativeTo(null);
+                detailsPopUp.pack();
+                detailsPopUp.setVisible(true);
+                if(detailsPopUp.getPotransaction()!= null){
+                    transactionList.add( detailsPopUp.getPotransaction());
+                    initializeTable();
+                }
+           }
+//        }
+//                = new InItemUi(new JFrame(),true,false);
+//                detailsPopUp.setLocationRelativeTo(null);
+//                detailsPopUp.pack();
+//                detailsPopUp.setVisible(true);
+//                transactionList.add( detailsPopUp.getTransaction());
+
+    }//GEN-LAST:event_addItemButtonActionPerformed
+
+    private void removeItemButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeItemButtonActionPerformed
+        // TODO add your handling code here:
+        if(-1<itemTable.getSelectedRow()){
+            if(editFlg){
+                deleteList.add(transactionList.get(itemTable.getSelectedRow()));
+            }
+            transactionList.remove(itemTable.getSelectedRow());
+            initializeTable();
+        } else {
+            JOptionPane.showMessageDialog(this,ErrorMessages.ERROR_TRANSACTION_ITEM ,ErrorMessages.TITLE_ERROR,JOptionPane.ERROR_MESSAGE);
+        }
+        
+    }//GEN-LAST:event_removeItemButtonActionPerformed
+
+    private void invoiceMonthComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_invoiceMonthComboBoxActionPerformed
+        // TODO add your handling code here:
+        invoiceDayComboBox.setModel(DateActions.fixDay(invoiceMonthComboBox.getSelectedIndex(), invoiceYearComboBox.getSelectedItem().toString()));
+}//GEN-LAST:event_invoiceMonthComboBoxActionPerformed
+
+    private void invoiceYearComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_invoiceYearComboBoxActionPerformed
+        // TODO add your handling code here:
+        invoiceDayComboBox.setModel(DateActions.fixDay(invoiceMonthComboBox.getSelectedIndex(), invoiceYearComboBox.getSelectedItem().toString()));
+}//GEN-LAST:event_invoiceYearComboBoxActionPerformed
+
+    private void transactionNumberTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_transactionNumberTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_transactionNumberTextFieldActionPerformed
+
+    private void voidButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_voidButtonActionPerformed
+        // TODO add your handling code here:
+        
+         int confirm = JOptionPane.showConfirmDialog(this, ErrorMessages.CONFIRM_DELETE_PO, ErrorMessages.TITLE_DELETE, JOptionPane.YES_NO_OPTION);
+            if(confirm == JOptionPane.YES_OPTION){
+                
+                Client loc = (Client) locationComboBox.getSelectedItem();
+                      PreorderAction.voidSQLLogic(preorder.getPreorderId(),transactionList,outFlg, loc.getClientId());
+                      this.dispose();
+            }
+    }//GEN-LAST:event_voidButtonActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+//    public static void main(String args[]) {
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//
+//            public void run() {
+//                AddClient dialog = new AddClient(new javax.swing.JFrame(), true);
+//                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+//
+//                    public void windowClosing(java.awt.event.WindowEvent e) {
+//                        System.exit(0);
+//                    }
+//                });
+//                dialog.setVisible(true);
+//            }
+//        });
+//    }
+    private void initializeTable(){
+        
+        itemTable.getTableHeader().setReorderingAllowed(false);
+        DefaultTableModel mod = new DefaultTableModel(){
+            @Override
+            public boolean isCellEditable(int row, int column){
+                return false;
+            }
+        };
+       
+//        mod.setColumnIdentifiers(new String[] {"Item Name","Item Supplier", "Quantity", "Amount per","Sub Total"});
+        mod.setColumnIdentifiers(new String[] {"Item Name", "Quantity", "Amount per","Sub Total"});
+        Double totalAmount = 0.00;
+//        if(!transactionList.isEmpty()){
+//        for(Transaction emp: transactionList){
+//           mod.addRow(new String[] {emp.getItemName()+"",emp.getSupplierName()+"",emp.getTransactionQuantity().toString()+"",Formats.centavoDecimal.format(emp.getTransactionPrice())+"", Formats.centavoDecimal.format(emp.getTransactionSubTotal())});
+//            totalAmount += emp.getTransactionSubTotal();
+//        }
+        for(PreorderTransaction emp: transactionList){
+            String fraquant= FractionAction.convertToFraction(emp.getPreorderTransactionQuantity());
+           mod.addRow(new String[] {emp.getPreorderItemName()+"",fraquant+"",Formats.centavoDecimal.format(emp.getPreorderTransactionPrice())+"", Formats.centavoDecimal.format(emp.getPreorderTransactionSubTotal())});
+            totalAmount += emp.getPreorderTransactionSubTotal();
+        }
+        
+//        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<DefaultTableModel>(mod);
+        itemTable.setModel(mod);
+//        itemTable.setRowSorter(sorter);
+        itemTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        itemTable.setShowGrid(true);
+        itemTable.setGridColor(Color.black);
+//        itemTable.getColumnModel().removeColumn(itemTable.getColumnModel().getColumn(3));
+        System.out.println(itemTable.getModel());
+        totalValueLabel.setText(Formats.centavoDecimal.format(totalAmount));
+    }
+//    }
+    
+    private boolean checkClient(){
+         boolean errorFlg = false;
+        String errMsg = new String();
+        if(customerNameLabel.isEnabled()){
+         if(customerNameLabel.getText().equals("-")){
+            errorFlg = true;
+            errMsg += "* "+ErrorMessages.ERROR_TRANSACTION_CUSTOMER;
+        }  
+         if(errorFlg){
+            
+            JOptionPane.showMessageDialog(this,errMsg ,ErrorMessages.TITLE_ERROR,JOptionPane.ERROR_MESSAGE);
+        }
+        
+       
+    }
+         return errorFlg;
+        }
+    private boolean checkItem(){
+        boolean errorFlg = false;
+        String errMsg = new String();
+        
+        if(transactionNumberTextField.getText().isEmpty()||transactionNumberTextField.getText() == null){
+                errorFlg = true;
+                errMsg += "* "+ErrorMessages.ERROR_TRANSACTION_NUMBER;
+        }
+         if(customerNameLabel.isEnabled()){
+         if(customerNameLabel.getText().equals("-")){
+            errorFlg = true;
+            errMsg += "* "+ErrorMessages.ERROR_TRANSACTION_CUSTOMER;
+        }  
+//        checkClient();
+         }
+        if(transactionList.isEmpty()){
+            errorFlg = true;
+            errMsg += "* "+ErrorMessages.ERROR_TRANSACTION_ITEM;
+        } 
+        if(errorFlg){
+            
+            JOptionPane.showMessageDialog(this,errMsg ,ErrorMessages.TITLE_ERROR,JOptionPane.ERROR_MESSAGE);
+        }
+        
+        return errorFlg;
+        
+        
+    }
+     
+     private void success(){
+      int answer = JOptionPane.showConfirmDialog(this,ErrorMessages.CONFIRM_ADDED_ITEM,ErrorMessages.TITLE_SUCCESS,JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+          if(answer==0){
+             transactionNumberTextField.requestFocus();
+             transactionNumberTextField.setText("");
+             transactionList.clear();
+             initializeTable();
+//             transactionQuantityTextField1.setText("");
+//             transactionPriceTextField.setText("");
+          }else{
+             this.dispose();
+         }
+     }
+     
+     private void addInvoice(){
+         int success;
+         boolean receivableFlg = false;
+                    int year = Integer.parseInt(invoiceYearComboBox.getSelectedItem().toString());
+                    int month = invoiceMonthComboBox.getSelectedIndex();
+                    int day = invoiceDayComboBox.getSelectedIndex()+1;
+                    Client loc = (Client) locationComboBox.getSelectedItem();
+                    int locationId = loc.getClientId();
+                    success = PreorderAction.invoiceSQLLogic(client.getClientId(),totalValueLabel.getText(), transactionNumberTextField.getText(), receivableFlg, transactionList,year, month, day, outFlg, locationId);
+//                    if(success < 0 ){
+//                        this.dispose();
+//                    } else {
+//                        success();
+//                    }
+     }
+     
+     private void editInvoice(){
+         boolean receivableFlg = false;
+      
+            int year = Integer.parseInt(invoiceYearComboBox.getSelectedItem().toString());
+            int month = invoiceMonthComboBox.getSelectedIndex();
+            int day = invoiceDayComboBox.getSelectedIndex()+1;
+            Client loc = (Client) locationComboBox.getSelectedItem();
+//            InvoiceAction.invoiceEditSQLLogic(invoice.getInvoiceId(),client.getClientId(),totalValueLabel.getText(), transactionNumberTextField.getText(), receivableFlg, paymentComboBox.getSelectedIndex(), transactionList,year, month, day, outFlg, deleteList);
+            PreorderAction.invoiceEditSQLLogic(preorder.getPreorderId(),client.getClientId(),totalValueLabel.getText(), transactionNumberTextField.getText(), transactionList,year, month, day, outFlg, deleteList, loc.getClientId());
+     }
+     
+     private void addPoLogic(){
+          if(InvoiceAction.checkTotalBalance(client.getClientId(), totalValueLabel.getText()) >= 0.0){
+                  addInvoice();
+                  this.dispose();
+            } else {
+             int confirm = JOptionPane.showConfirmDialog(this, ErrorMessages.WARNING_CREDIT_LIMIT+Formats.centavoDecimal.format(client.getClientCreditLimit())+ErrorMessages.WARNING_CREDIT_LIMIT_MESSAGE, ErrorMessages.TITLE_WARNING, JOptionPane.YES_NO_CANCEL_OPTION);
+             if( confirm == JOptionPane.YES_OPTION){
+                LoginUi detailsPopUp = new LoginUi(new JFrame(), true);
+                detailsPopUp.setLocationRelativeTo(null);
+                detailsPopUp.pack();
+                detailsPopUp.setVisible(true);
+                if(detailsPopUp.getUser()!= null){
+                    User u = detailsPopUp.getUser();
+//                    lblWelcomeUser1.setText("Welcome ["+u.getUserUsername() +"].");
+//                    checkRights(u.getUserType());
+                    if(detailsPopUp.getVerification()){
+                        addInvoice();
+                        this.dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(this,ErrorMessages.ERROR_AUTHORIZATION ,ErrorMessages.TITLE_ERROR,JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+                } else if(confirm == JOptionPane.NO_OPTION){
+                    this.dispose();
+                }
+            
+           this.dispose();
+        }
+     }
+     
+     private void editPoLogic(){
+         if(InvoiceAction.checkTotalBalance(client.getClientId(), totalValueLabel.getText()) >= 0.0){
+               editInvoice();
+               this.dispose();
+            } else {
+               int confirm = JOptionPane.showConfirmDialog(this, ErrorMessages.WARNING_CREDIT_LIMIT+Formats.centavoDecimal.format(client.getClientCreditLimit())+ErrorMessages.WARNING_CREDIT_LIMIT_MESSAGE, ErrorMessages.TITLE_WARNING, JOptionPane.YES_NO_CANCEL_OPTION);
+               if( confirm == JOptionPane.YES_OPTION){
+                LoginUi detailsPopUp = new LoginUi(new JFrame(), true);
+                detailsPopUp.setLocationRelativeTo(null);
+                detailsPopUp.pack();
+                detailsPopUp.setVisible(true);
+                if(detailsPopUp.getUser()!= null){
+                    User u = detailsPopUp.getUser();
+//                    lblWelcomeUser1.setText("Welcome ["+u.getUserUsername() +"].");
+//                    checkRights(u.getUserType());
+                    if(detailsPopUp.getVerification()){
+                        editInvoice();
+                        this.dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(this,ErrorMessages.ERROR_AUTHORIZATION ,ErrorMessages.TITLE_ERROR,JOptionPane.ERROR_MESSAGE);
+                    }
+    
+               } else if (confirm == JOptionPane.NO_OPTION){
+                 this.dispose();
+               } 
+               
+            } 
+     }
+             
+             
+     }
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addClientCancelButton;
+    private javax.swing.JButton addInvoiceOkButton;
+    private javax.swing.JButton addItemButton;
+    private javax.swing.JLabel clientAddress;
+    private javax.swing.JLabel customerNameLabel;
+    private javax.swing.JLabel customerNumberValueLabel;
+    private javax.swing.JComboBox invoiceDayComboBox;
+    private javax.swing.JComboBox invoiceMonthComboBox;
+    private javax.swing.JComboBox invoiceYearComboBox;
+    private javax.swing.JLabel itemNameLabel;
+    private javax.swing.JTable itemTable;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JComboBox locationComboBox;
+    private javax.swing.JButton removeItemButton;
+    private javax.swing.JLabel supplierLabel;
+    private javax.swing.JLabel supplierNumberLabel;
+    private javax.swing.JLabel totalLabel;
+    private javax.swing.JLabel totalValueLabel;
+    private javax.swing.JTextField transactionNumberTextField;
+    private javax.swing.JButton voidButton;
+    // End of variables declaration//GEN-END:variables
+}

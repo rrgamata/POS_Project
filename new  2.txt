@@ -1,0 +1,27 @@
+By default, MySQL does not allow remote clients to connect to the MySQL database.
+
+If you try to connect to a remote MySQL database from your client system, you will get “ERROR 1130: Host is not allowed to connect to this MySQL server” message as shown below.
+
+$ mysql -h 192.168.1.8 -u root -p
+Enter password:
+ERROR 1130: Host '192.168.1.4' is not allowed to connect to this MySQL server
+You can also validate this by doing telnet to 3306 mysql port as shown below, which will also give the same “host is not allowed to connect to this mysql server” error message as shown below.
+
+$ telnet 192.168.1.8 3306
+host 192.168.1.4 is not allowed to connect to this mysql server
+If you want to allow a specific client ip-address (for example: 192.168.1.4) to access the mysql database running on a server, you should execute the following command on the server that is running the mysql database.
+
+$ mysql -u root -p
+Enter password:
+
+mysql> use mysql
+
+mysql> GRANT ALL ON *.* to root@'192.168.1.4' IDENTIFIED BY 'your-root-password'; 
+
+mysql> FLUSH PRIVILEGES;
+Also, update firewall rules to make sure port# 3306 is open on the server that is running the mysql database.
+
+After the above changes, when you try to connect to the mysql database from a remote client, you’ll not get the “Host is not allowed to connect to this MySQL server” error message anymore.
+
+
+ 
